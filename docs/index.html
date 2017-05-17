@@ -1,0 +1,554 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>Coveralls migration story</title>
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+        <link rel="manifest" href="/manifest.json">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+
+        <style type="text/css">
+            .reveal .slides {
+                text-align: left;
+            }
+            p.center {
+                text-align: center;
+            }
+            font.gray {
+                color: gray;
+                font-size: 15px;
+            }
+        </style>
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n">
+                    <script type="text/template">
+Coveralls migration story  
+PHP BLT #7
+
+---
+
+## このセッションについて
+
+---
+
+このセッションについて
+- - -
+<br />
+<br />
+<br />
+Coverallsを使ってmigrationしたおかげで  
+給料があがり、彼女ができたセッション
+
+---
+
+# ではありません。
+
+---
+
+このセッションについて
+- - -
+<br />
+<br />
+<br />
+php-coverallsをmigrationしたセッションです。
+
+---
+
+## ではよろしくお願いします!!
+
+---
+
+自己紹介
+- - -
+* Name: Kazuaki Mabuchi
+* Twitter: [KazuakiM@NanohaAsOnKai](https://twitter.com/NanohaAsOnKai)
+* GitHub: [KazuakiM](https://github.com/KazuakiM)
+* Jobs: Web application engineer
+* Cluster: PHP, JavaScript, MySQL, Vim
+* kwsk: [ここをクリック](https://kazuakim.github.io/aboutme/)
+
+---
+
+# Coverallsとは?
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/Coveralls01.png">
+                    <script type="text/template">
+<h1>
+```
+Coverallsとは?
+```
+</h1>
+- - -
+```
+カバレッジレポートを視覚的に見えるようにしたサービスです。
+```
+<br />
+<h1>
+```
+カバレッジレポート?
+```
+</h1>
+- - -
+```
+テストコードがアプリをどれだけ網羅して  
+実行されたかレポート(ファイル)に出力したもの
+```
+                  </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/Coveralls02.png">
+                    <script type="text/template">
+<h1>
+```
+Coverallsのメリット?
+```
+</h1>
+- - -
+<br />
+<br />
+<h2>
+```
+CIの強い味方
+・ Bitbucket や GitHub との連携
+・ CircleCI や TravisCI からの連携
+・ 履歴管理
+```
+</hj>
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n">
+                    <script type="text/template">
+今回はCoverallsの詳細は割愛しますが、  
+興味がわきましたら、調べてみてください。
+
+---
+
+# で、本題
+
+---
+
+php-coveralls 2.0 リリースへの道
+- - -
+リリースに向けて活動中。  
+テストコード修正で貢献してます😊👏
+
+---
+
+php-coveralls 2.0 リリースへの道
+- - -
+Coverallsを利用しているPHPerが待っている2.0
+<br />
+<br />
+<br />
+<center>
+    なぜ待たれているのか、  
+    利用者の目線から見ていきます。
+</center>
+
+---
+
+php-coverallsの闇(1)
+- - -
+ver 1.0.1のcomposer.jsonの設定
+```
+{
+    "require": {
+        "guzzle/guzzle": "^2.8|^3.0"
+    }
+}
+```
+
+---
+
+php-coverallsの闇(1)
+- - -
+ver 1.0.1のcomposer.jsonの設定
+```
+{
+    "require": {
+        "guzzle/guzzle": "^2.8|^3.0"
+    }
+}
+```
+<br />
+<center>
+    Guzzleのバージョン指定が3.x台で固定  
+    php-coveralls 2.0では6.x台をサポート
+</center>
+
+---
+
+php-coverallsの闇(2)
+- - -
+masterブランチへのpushが2016年1月21日で止まっていた。
+
+---
+
+2つの闇が交差すると新たな闇が発生します(定説)
+
+---
+
+php-coverallsの闇(3)
+- - -
+issuesに『このissueどうなってんの?』と書き込む謎の人
+
+---
+
+php-coverallsの闇(3)
+- - -
+issuesに『このissueどうなってんの?』と書き込む謎の人
+<br />
+<br />
+<br />
+<center>
+    残念度が高いですね。
+</center>
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/it_is_me.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+ここで事例: KazuakiMさん
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/sandaime.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+事例: KazuakiMさんの場合
+- - -
+TravisCIのPHP7.1をサポートしようず!!
+<br />
+<br />
+<br />
+```
+私(有名なライブラリに貢献や!)
+```
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/hawawa.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+事例: KazuakiMさんの場合
+- - -
+あれっ!?なんかめっちゃエラーでる。  
+直せばええんか?
+<br />
+<br />
+```
+私(ものすごく貢献するチャンスを引き当てたのかもしれない?)
+```
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/muripo.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+事例: KazuakiMさんの場合
+- - -
+えっ!?  
+なんかどんどん修正範囲でかくなるんだけど...?
+<br />
+<br />
+```
+私(...。)
+```
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/keiba.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+事例: KazuakiMさんの場合
+- - -
+<br />
+<br />
+<br />
+```
+私(なるほどね。)
+```
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/bokoboko.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+事例: KazuakiMさんの場合
+- - -
+レビューアいるか試しに投げてみるか。
+<br />
+<br />
+<br />
+```
+私(なんかの記事でファーストインプレッションを悪くすると  
+   次のレビューが優しくなるってあったし大丈夫だろ)
+```
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/usagi_r.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+# 英語の洗礼
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/nightmare.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+migrationの前半まとめ
+- - -
+## メンテナンス大事
+## 英語頑張る
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/goromaru.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+migration
+- - -
+* TravisCIのPHP7.1サポート
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+```
+私(リベンジや!)
+```
+
+---
+
+migration
+- - -
+* TravisCIのPHP7.1サポート
+* テストコードバグフィックス
+<br />
+<br />
+<br />
+<br />
+<br />
+```
+私(まぁ、TravisCIコケてるからね。)
+```
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/review.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+## ここでレビュー
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/pinpon.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+migration
+- - -
+* TravisCIのPHP7.1サポート
+* テストコードバグフィックス
+* CircleCIのバグフィックス
+<br />
+<br />
+<br />
+<br />
+```
+レビューア(ガンガン直してこー!)
+私(CircleCIを直したで!)
+```
+
+---
+
+migration
+- - -
+* TravisCIのPHP7.1サポート
+* テストコードバグフィックス
+* CircleCIのバグフィックス
+* Prophecyの活用
+<br />
+<br />
+<br />
+```
+レビューア(Prophecy活用してこうよ)
+私(へぇいいね、ソレ。)
+```
+
+---
+
+migration
+- - -
+* TravisCIのPHP7.1サポート
+* テストコードバグフィックス
+* CircleCIのバグフィックス
+* Prophecyの活用
+* PHPUnit 6.xサポート
+<br />
+<br />
+```
+私(TravisCIのPHP7.xのPHPUnitが  
+     6.xにバージョンアップしたわ)
+```
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/nessyo.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+## master merge
+
+---
+
+migration
+- - -
+* TravisCIのPHP7.1サポート
+* テストコードバグフィックス
+* CircleCIのバグフィックス
+* Prophecyの活用
+* PHPUnit 6.xサポート
+* Appveyorサポート   ←イマココ
+```
+私(このライブラリ実はWindowsサポート  
+     してるのか。)
+```
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/hawawa.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+migration
+- - -
+
+あと少しで2.0リリースと思っていたら、  
+5月が終わりそうです。
+
+---
+
+migration
+- - -
+
+あと少しで2.0リリースと思っていたら、  
+5月が終わりそうです。
+<br />
+<br />
+<br />
+<center>
+    ここが正念場なんで気合💪💪💪
+</center>
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/yatta.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+まとめ
+- - -
+### コミュニケーション大事
+#### (masterブランチだけど、)Guzzle 6.x台が使える
+### はやく2.0だしたい
+                    </script>
+                </section>
+                <section data-markdown data-separator="\n---\n$" data-vertical="\n--\n"
+                    data-background="img/sushizanmai.svg"
+                    data-background-position="bottom right"
+                    data-background-size="25%">
+                    <script type="text/template">
+ご清聴ありがとうございました。
+                    </script>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: false,
+                history: false,
+                slideNumber: true,
+                transition: "none",
+
+                // More info https://github.com/hakimel/reveal.js#dependencies
+                dependencies: [
+                    {
+                        src: 'plugin/markdown/marked.js'
+                    },
+                    {
+                        src: 'plugin/markdown/markdown.js'
+                    },
+                    {
+                        src: 'plugin/notes/notes.js',
+                        async: true
+                    },
+                    {
+                        src: 'plugin/highlight/highlight.js',
+                        async: true,
+                        callback: function() {
+                            hljs.initHighlightingOnLoad();
+                        }
+                    }
+                ]
+            });
+
+            Reveal.addEventListener("slidechanged", function(event) {
+                if (0 <= [0, 1, 3, 5, 7, 10, 11, 17, 20, 26, 30, 34, 39].indexOf(Reveal.getState().indexh)) {
+                    Reveal.configure({
+                        center: true
+                    });
+                } else {
+                    Reveal.configure({
+                        center: false
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>
